@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Digital Product Download Security Demo</title>
+    <title>Digital Product Demo</title>
     <style>
         body { font-family: Arial, sans-serif; text-align: center; margin: 50px; background-color: #f4f4f9; }
         .product-card { max-width: 400px; margin: 0 auto; padding: 30px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); background-color: #ffffff; }
@@ -13,16 +13,15 @@
         
         /* Modal (Popup) CSS */
         .modal {
-            display: none; 
+            display: none; /* Default hidden */
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background-color: rgba(0, 0, 0, 0.7); 
             z-index: 1000; overflow: auto;
-            display: flex; /* Flexbox use kiya tak isse center kar sakein */
             align-items: center; justify-content: center;
         }
         .modal-content {
             background-color: #4CAF50; color: white; 
-            padding: 30px; 
+            margin: 15% auto; padding: 30px; 
             border-radius: 10px; width: 80%; max-width: 400px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.3);
             animation: fadeIn 0.5s;
@@ -42,74 +41,55 @@
 <body>
 
     <div class="product-card">
-        <h1>🚀 My Secure Digital Product (Demo)</h1>
-        <p>Yeh payment page hai. Payment ke baad aapko isi page par download link milega, jo chhipa rahega.</p>
+        <h1>🚀 My Secret eBook (Demo)</h1>
+        <p>Yeh eBook kharidne ke liye ₹99 ka bhugtan karein. Payment ke baad download link turant pop-up mein milega!</p>
         
-        <button class="buy-button" onclick="alert('Demo: Payment Gateway open hoga. Successful payment ke baad, aapko neeche diye gaye URL se wapas aana hoga.')">Buy Now (Cashfree Demo)</button>
+        <button class="buy-button" onclick="alert('Demo: Payment Gateway open hoga. Payment successful hone par aapko niche diye gaye Hidden URL se wapas aana hoga.')">Buy Now (Cashfree)</button>
     </div>
 
     <div id="downloadModal" class="modal">
         <div class="modal-content">
             <h2>✅ Success! Download Ready</h2>
             <p>Aapka payment safal ho gaya hai. Abhi download karein:</p>
-            
-            <a id="downloadButton" href="javascript:void(0)" class="download-button" download>Download Your eBook</a>
-            
-            <p style="margin-top:15px; font-size:0.8em;">(Yeh link tabhi kaam karega jab aap payment karenge)</p>
+            <a id="downloadButton" href="https://drive.google.com/uc?export=download&id=1s0Z4t7k0XYvow07JChpAkB9iwkI6jrRa" class="download-button" target="_blank">Download Your eBook PDF</a>
+            <p style="margin-top:15px; font-size:0.8em;">(Yeh link kewal ek baar kaam karega - Demo)</p>
         </div>
     </div>
 
 <script>
-    // --- 🔑 STEP 1: CONFIGURATION SETTINGS 🔑 ---
+    // --- 🔑 AAPKA SECRET KEY ---
+    const REQUIRED_SECRET_KEY = 'MY_EBOOK_KEY_123'; 
+    // Is key ko aap Cashfree ke Redirect URL mein use karenge!
 
-    // 1. Google Drive se apni file ID yahan daalein.
-    // NOTE: Yeh demo ID hai, aapko apni asli ID daalni hogi!
-    const YOUR_FILE_ID = "1s0Z4t7k0XYvow07JChpAkB9iwkI6jrRa"; 
-    
-    // 2. Woh Secret Key jo aap Cashfree ke Redirect URL mein daalenge
-    const REQUIRED_SECRET_KEY = 'demo5342'; 
-
-    // FINAL DOWNLOAD LINK (Yeh link chhipa rahega)
-    const ACTUAL_DOWNLOAD_LINK = `https://drive.google.com/uc?export=download&id=${1s0Z4t7k0XYvow07JChpAkB9iwkI6jrRa}`;
-    
-    // --- CORE LOGIC ---
-    
     // Function to get query parameters from the URL
     function getUrlParam(param) {
         const urlParams = new URLSearchParams(window.location.search);
         return urlParams.get(param);
     }
 
-    // Check karein ki URL mein 'payment_status=success' aur 'secret_key' maujood hain
+    // Check karein ki payment successful hai aur secret key match karta hai
     const paymentStatus = getUrlParam('payment_status');
     const secretKey = getUrlParam('secret_key');
 
     if (paymentStatus === 'success' && secretKey === REQUIRED_SECRET_KEY) {
         
-        // 1. Download Popup ko dikhayein aur link set karein
+        // 1. Download Popup ko dikhayein
         showDownloadPopup(); 
         
         // 2. ***MAGIC HIDING STEP***: URL se query parameters hatayein
-        // Yahi woh step hai jo user ke browser se secret key chhipata hai
+        // Isse user ke browser mein sirf 'https://user.github.io/repo/index.html' dikhega
+        // Aur woh 'secret_key' chhip jayega!
         history.replaceState(null, null, location.pathname); 
+
+    } else if (paymentStatus === 'success' && secretKey !== REQUIRED_SECRET_KEY) {
+        // Agar status 'success' hai par key galat hai toh kuch mat karo
+        console.log("Payment success hua, lekin secret key galat hai. Download block kiya gaya.");
     }
 
 
     function showDownloadPopup() {
         // Modal ko display karein
         document.getElementById('downloadModal').style.display = 'flex';
-        
-        // Download Button par click event listener lagaayein taaki link chhipa rahe
-        const downloadBtn = document.getElementById('downloadButton');
-        
-        // Jab user button dabayega, tab download shuru hoga
-        downloadBtn.onclick = function() {
-            // Button dabne par, woh chhipa hua link naye tab mein open karein
-            window.open(ACTUAL_DOWNLOAD_LINK, '_blank'); 
-            
-            // Optional: Popup band kar dein
-            // document.getElementById('downloadModal').style.display = 'none';
-        };
     }
 </script>
 
