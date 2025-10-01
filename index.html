@@ -254,6 +254,7 @@
         transform: scale(0.97);
         box-shadow: 0 2px 5px rgba(16,185,129,0.3);
     }
+    
     /* Shine Effect on Button */
     .download-button .btn-shine {
         position: absolute;
@@ -262,13 +263,14 @@
         background: linear-gradient(90deg,rgba(255,255,255,0) 0%, rgba(255,255,255,0.8) 45%, rgba(255,255,255,0.4) 60%, rgba(255,255,255,0) 100%); 
         mix-blend-mode: screen; 
         pointer-events: none;
-        opacity: 0;
-        transition: opacity 0.3s;
-    }
-    .download-button:hover .btn-shine {
+        /* ⭐ FIXED: Opacity 1 कर दिया ताकि हमेशा दिखे */
         opacity: 1;
+        transition: opacity 0.3s;
+        /* ⭐ FIXED: Animation को सीधे बटन पर लगा दिया */
         animation: btnshine 2.6s ease-in-out infinite;
     }
+    /* OLD CODE REMOVED: .download-button:hover .btn-shine { ... } */
+
     /* Loading/Processing State */
     .download-button.loading {
       opacity: 0.7;
@@ -545,7 +547,7 @@
         <i data-lucide="check-circle" class="h-6 w-6"></i>
         <span>Payment Successful!</span>
       </h2>
-      <p class="mb-4 text-zinc-300">Thank you for your purchase, Your reading journey begins now…</p>
+      <p class="mb-4 text-zinc-300">Aapka payment safal ho gaya hai. Abhi download karein aur padhna shuru karein!</p>
       
       <button id="downloadButton" class="download-button" onclick="handleDownloadClick(this)">
         <i data-lucide="download" class="h-5 w-5"></i>
@@ -555,10 +557,10 @@
 
       <div id="download-message">
         <i data-lucide="loader-2" class="h-4 w-4 inline animate-spin mr-1"></i>
-        Please check your downloads folder.
+        **Download Starting...** Please check your downloads.
       </div>
 
-      <p class="mt-4 text-xs text-zinc-500">(Note: This link is unique & works only once for security.)</p>
+      <p class="mt-4 text-xs text-zinc-500">(Yeh link kewal ek baar kaam karega - Demo)</p>
     </div>
   </div>
 
@@ -670,13 +672,18 @@
     function handleDownloadClick(button) {
       const downloadMessage = document.getElementById('download-message');
       const btnText = document.getElementById('downloadBtnText');
-      const downloadIcon = button.querySelector('[data-lucide="download"]');
-
+      // Find the current icon, which might be the download icon or a spinner
+      let currentIcon = button.querySelector('[data-lucide="download"], [data-lucide="loader-2"]');
+      
       // 1. Add "loading" effect and change button text
       button.classList.add('loading');
       btnText.textContent = 'Initiating Download...';
-      downloadIcon.outerHTML = '<i data-lucide="loader-2" class="h-5 w-5 animate-spin"></i>'; // Replace icon with spinner
-      lucide.createIcons(); // Re-render the new icon
+      
+      // Replace icon with spinner
+      if (currentIcon) {
+          currentIcon.outerHTML = '<i data-lucide="loader-2" class="h-5 w-5 animate-spin"></i>'; 
+          lucide.createIcons(); // Re-render the new icon
+      }
 
       // 2. Show the "Download Starting..." message
       downloadMessage.classList.add('show');
@@ -687,7 +694,7 @@
         
         // 4. Update the message permanently
         btnText.textContent = 'Downloaded!';
-        downloadMessage.innerHTML = '<i data-lucide="check-circle" class="h-4 w-4 inline text-emerald-400 mr-1"></i>Please check your downloads folder.';
+        downloadMessage.innerHTML = '<i data-lucide="check-circle" class="h-4 w-4 inline text-emerald-400 mr-1"></i> **Download Started!** Please check your downloads folder.';
         
         // Re-render new icon in message
         lucide.createIcons(); 
