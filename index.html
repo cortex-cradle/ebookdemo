@@ -23,7 +23,7 @@ button:hover{background:#0e5de6}
 <input id="amount" name="amount" type="number" value="49" min="1" required>
 <button type="submit">Next — Pay</button>
 </form>
-<div class="small">Demo mode (No real payment)</div>
+<div class="small">Demo mode (Cashfree Sandbox)</div>
 </div>
 
 <script>
@@ -34,10 +34,14 @@ document.getElementById('buyForm').addEventListener('submit', function(e){
   const email=document.getElementById('email').value;
   const amount=document.getElementById('amount').value;
 
-  // Simple Cashfree sandbox URL for demo (redirect with query params)
-  const demoUrl=`https://sandbox.cashfree.com/pg/orders?order_amount=${amount}&customer_name=${encodeURIComponent(name)}&customer_phone=${encodeURIComponent(phone)}&customer_email=${encodeURIComponent(email)}`;
+  // Simple Sandbox redirect — no Worker, no API keys needed
+  const demoUrl=`https://sandbox.cashfree.com/pg/links`;
 
-  window.open(demoUrl,'_blank'); // opens new tab
+  // Open Cashfree sandbox in new tab
+  window.open(demoUrl,'_blank');
+
+  // Optional: alert user for demo
+  alert('This is a demo. Sandbox payment page opened in a new tab.');
 });
 </script>
 </body>
