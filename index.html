@@ -1,98 +1,44 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Ebook Demo - Payment</title>
-  <style>
-    body {
-      font-family: system-ui, Arial;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      background: #f4f6fb;
-      margin: 0;
-    }
-    .card {
-      background: #fff;
-      padding: 25px;
-      border-radius: 12px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-      width: 320px;
-      text-align: center;
-    }
-    input {
-      width: 100%;
-      padding: 10px;
-      margin: 8px 0;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      font-size: 15px;
-    }
-    button {
-      width: 100%;
-      padding: 10px;
-      margin-top: 10px;
-      border: none;
-      border-radius: 6px;
-      background: #1f72ff;
-      color: white;
-      font-weight: bold;
-      font-size: 15px;
-      cursor: pointer;
-    }
-    button:hover { background: #0e5de6; }
-    .small { font-size: 12px; color: #666; margin-top: 8px; }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ebook Demo Payment</title>
+<style>
+body{font-family:Arial,sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;background:#f4f6fb;margin:0}
+.card{background:#fff;padding:25px;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.1);width:320px;text-align:center}
+input{width:100%;padding:10px;margin:8px 0;border:1px solid #ccc;border-radius:6px;font-size:15px}
+button{width:100%;padding:10px;margin-top:10px;border:none;border-radius:6px;background:#1f72ff;color:white;font-weight:bold;font-size:15px;cursor:pointer}
+button:hover{background:#0e5de6}
+.small{font-size:12px;color:#666;margin-top:8px}
+</style>
 </head>
 <body>
-  <div class="card">
-    <h3>Buy Ebook - Demo</h3>
-    <form id="buyForm">
-      <input id="name" name="name" placeholder="Full Name" required />
-      <input id="phone" name="phone" placeholder="Phone (10 digits)" required pattern="[0-9]{10}" />
-      <input id="email" name="email" type="email" placeholder="Email" required />
-      <input id="amount" name="amount" type="number" value="49" min="1" required />
-      <button type="submit">Next — Pay</button>
-    </form>
-    <div class="small">Demo mode (Cashfree Sandbox)</div>
-  </div>
+<div class="card">
+<h3>Buy Ebook - Demo</h3>
+<form id="buyForm">
+<input id="name" name="name" placeholder="Full Name" required>
+<input id="phone" name="phone" placeholder="Phone (10 digits)" required pattern="[0-9]{10}">
+<input id="email" name="email" type="email" placeholder="Email" required>
+<input id="amount" name="amount" type="number" value="49" min="1" required>
+<button type="submit">Next — Pay</button>
+</form>
+<div class="small">Demo mode (No real payment)</div>
+</div>
 
-  <script>
-    // ⚙️ Yahan apna Cloudflare Worker URL daal
-    const WORKER_URL = "https//flat-butterfly-8616.rdxconfig07.workers.dev/"; // <-- replace this!
+<script>
+document.getElementById('buyForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  const name=document.getElementById('name').value;
+  const phone=document.getElementById('phone').value;
+  const email=document.getElementById('email').value;
+  const amount=document.getElementById('amount').value;
 
-    document.getElementById('buyForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const payload = {
-        name: document.getElementById('name').value.trim(),
-        phone: document.getElementById('phone').value.trim(),
-        email: document.getElementById('email').value.trim(),
-        amount: parseFloat(document.getElementById('amount').value),
-        product: "Demo Ebook",
-        return_url: window.location.href
-      };
+  // Simple Cashfree sandbox URL for demo (redirect with query params)
+  const demoUrl=`https://sandbox.cashfree.com/pg/orders?order_amount=${amount}&customer_name=${encodeURIComponent(name)}&customer_phone=${encodeURIComponent(phone)}&customer_email=${encodeURIComponent(email)}`;
 
-      try {
-        const res = await fetch(WORKER_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-        const json = await res.json();
-        console.log(json);
-        if (json && json.link_url) {
-          window.location.href = json.link_url;
-        } else {
-          alert('Payment link not created. Check console for error.');
-          console.error(json);
-        }
-      } catch (err) {
-        console.error(err);
-        alert('Network error, try again.');
-      }
-    });
-  </script>
+  window.open(demoUrl,'_blank'); // opens new tab
+});
+</script>
 </body>
 </html>
