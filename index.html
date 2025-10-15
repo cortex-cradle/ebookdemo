@@ -1,729 +1,96 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>BookMintor Bhagavad Gita Details</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          boxShadow: {
-            glow: '0 12px 36px -12px rgba(99,102,241,0.7)',
-            ctaglow: '0 12px 40px -12px rgba(168,85,247,.7)',
-            book: '0 28px 60px -18px rgba(0, 0, 0, 0.65)',
-            // ⭐ NEW: Modal shadow for glowing look
-            modalGlow: '0 0 40px rgba(168,85,247,0.75), 0 0 20px rgba(99,102,241,0.65)'
-          },
-          keyframes: {
-            shine: { '0%': { transform: 'translateX(-140%)' }, '100%': { transform: 'translateX(140%)' } },
-            btnshine: { '0%': { transform: 'translateX(-140%) skewX(-30deg)' }, '100%': { transform: 'translateX(220%) skewX(-30deg)' } },
-            slideUp: { '0%': {opacity:'0', transform:'translateY(20px)'}, '100%':{opacity:'1', transform:'translateY(0)'} },
-            cornerPop: { '0%': { opacity: 0, transform:'scale(.95)' }, '40%': { opacity: .95 }, '100%': { opacity: 0, transform:'scale(1)' } },
-            aura: { '0%': { boxShadow: '0 0 12px rgba(168,85,247,0.6)' }, '50%': { boxShadow: '0 0 26px rgba(168,85,247,0.95)' }, '100%': { boxShadow: '0 0 12px rgba(168,85,247,0.6)' } },
-            coverShine: { '0%': { transform: 'translateX(-100%)' }, '100%': { transform: 'translateX(200%)' } },
-            fastShimmer: { 
-              '0%': { transform: 'translateX(-30%)', opacity: '1' },
-              '50%': { transform: 'translateX(30%)', opacity: '1' },
-              '100%': { transform: 'translateX(130%)', opacity: '1' }
-            },
-            highlightMove: {
-              '0%': { left: '-60%', opacity: '0' },
-              '20%': { left: '-20%', opacity: '0.9' },
-              '60%': { left: '60%', opacity: '0.9' },
-              '100%': { left: '120%', opacity: '0' }
-            },
-            coverFast: { '0%': { transform: 'translateX(-160%) skewX(-10deg)' }, '100%': { transform: 'translateX(160%) skewX(-10deg)' } },
-            glowspin: {
-              '0%': { transform: 'rotate(0deg)' },
-              '100%': { transform: 'rotate(360deg)' }
-            },
-            // ⭐ NEW: Modal Fade-In
-            modalFadeIn: {
-              '0%': { opacity: 0, transform: 'translateY(20px) scale(0.95)' },
-              '100%': { opacity: 1, transform: 'translateY(0) scale(1)' }
-            },
-             // ⭐ NEW: Button Click Down (Scale and shadow)
-             buttonClick: {
-              '0%': { transform: 'scale(1)', boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)' },
-              '100%': { transform: 'scale(0.97)', boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)' }
-            }
-          },
-          animation: {
-            shine: 'shine 1.6s ease-in-out infinite',
-            btnshine: 'btnshine 2.6s ease-in-out infinite',
-            slideUp: 'slideUp .45s ease-out forwards',
-            cornerPop: 'cornerPop .95s ease-out 0.15s 1 forwards',
-            aura: 'aura 2.4s ease-in-out infinite',
-            coverShine: 'coverShine 0.6s ease-in-out infinite',
-            fastShimmer: 'fastShimmer 0.8s linear infinite',
-            highlightMove: 'highlightMove 0.9s linear infinite',
-            coverFast: 'coverFast 0.45s linear infinite',
-            glowspin: 'glowspin 0.8s linear infinite',
-            // ⭐ NEW: Modal animation
-            modalFadeIn: 'modalFadeIn 0.35s ease-out forwards'
-          }
-        }
-      }
-    }
-  </script>
-
-  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet" />
-  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
-  <script src="https://unpkg.com/lucide@latest"></script>
-
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Ebook Demo - Payment</title>
   <style>
-    /* general */
-    body{font-family:'Poppins',sans-serif}
-    .cta-btn{ position:relative; overflow:hidden; animation: aura 2.4s ease-in-out infinite; box-shadow: 0 8px 30px rgba(124,58,237,0.25); }
-    .cta-btn .cta-shine{ position:absolute; inset:-6px; transform:translateX(-140%) skewX(-30deg); background:linear-gradient(90deg,rgba(255,255,255,0) 0%, rgba(255,255,255,0.43) 45%, rgba(255,255,255,0.15) 60%, rgba(255,255,255,0) 100%); transition: opacity 0.2s; opacity: 0.90; mix-blend-mode: screen; pointer-events:none; }
-    .cta-btn:hover .cta-shine { opacity: 1; }
-    .cta-btn .corner-bling{ pointer-events:none; position:absolute; inset:-6px; border-radius:12px; background:
-        radial-gradient(160px 160px at 0 0, rgba(255,255,255,.65), transparent 60%),
-        radial-gradient(160px 160px at 100% 0, rgba(255,255,255,.5), transparent 60%),
-        radial-gradient(160px 160px at 0 100%, rgba(255,255,255,.5), transparent 60%),
-        radial-gradient(160px 160px at 100% 100%, rgba(255,255,255,.5), transparent 60%);
-      opacity:0; filter: blur(6px); }
-    .cta-btn:hover .corner-bling { opacity: .95; }
-
-    details[open] summary svg{transform:rotate(180deg)}
-    .details-content{overflow:hidden; height:0; transition:height .32s ease}
-
-    /* book 3D */
-    .book-wrap { perspective:1600px; display:flex; align-items:center; justify-content:center; }
-    .book-3d {
-      width: 240px; 
-      height: 340px;
-      position: relative;
-      transform-style: preserve-3d;
-      transform: rotateY(-12deg) rotateX(4deg);
-      transition: transform .35s ease;
-      margin: 12px;
-    }
-    .book-3d:hover { transform: rotateY(-8deg) rotateX(6deg) translateY(-8px); }
-
-    /* cover */
-    .cover {
-      position:absolute;
-      width: 100%;
-      height: 100%;
-      left: 0;
-      top: 0;
-      transform: translateZ(12px) rotateY(0deg); 
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.45);
-      background: linear-gradient(180deg,#111217,#0f1216); 
-    }
-    .cover img { 
-      width:100%; 
-      height:100%; 
-      object-fit:cover; 
-      display:block; 
-      transition: opacity 0.28s ease, transform 0.28s ease; 
-      opacity:0; 
-      transform: scale(1.02);
-      will-change: opacity, transform;
-    }
-
-    /* MODIFIED: LITE BLACK VERY FAST SHINE */
-    .cover-shine {
-      position:absolute; inset:0; z-index:6; pointer-events:none;
-      background: linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.7) 28%, rgba(0,0,0,0.95) 50%, rgba(0,0,0,0.7) 72%, rgba(0,0,0,0) 100%);
-      transform: translateX(-160%) skewX(-10deg);
-      mix-blend-mode: multiply; 
-      opacity:0.95;
-      animation: coverFast 0.45s linear infinite; 
-      transition: none; 
-      filter: blur(8px);
-    }
-    
-    /* ⭐ NEW: Loading Glow Spin Effect (Outer Container) */
-    .cover-loading-spin {
-      position: absolute;
-      inset: 0;
-      z-index: 7; 
-      pointer-events: none;
+    body {
+      font-family: system-ui, Arial;
       display: flex;
       align-items: center;
       justify-content: center;
-      opacity: 1;
-      transition: opacity 0.4s ease-out; 
+      height: 100vh;
+      background: #f4f6fb;
+      margin: 0;
     }
-
-    /* ⭐ NEW: The actual spinning half-wheel (Small, Half-Round) */
-    .loading-half-wheel {
-      width: 40px; 
-      height: 40px;
-      border: 4px solid transparent; 
-      border-radius: 50%;
-      
-      /* Half-round glow look */
-      border-top-color: #6366f1;    /* Indigo-500 */
-      border-left-color: #a855f7;  /* Fuchsia-500 */
-      
-      /* Subtle glow/shadow */
-      box-shadow: 0 0 10px rgba(168, 85, 247, 0.7), inset 0 0 6px rgba(99, 102, 241, 0.5);
-      /* Rotation is applied via Tailwind class: animate-glowspin */
+    .card {
+      background: #fff;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      width: 320px;
+      text-align: center;
     }
-
-    /* ⭐ NEW: When the image is loaded, hide the loading spin */
-    .cover.loaded .cover-loading-spin {
-      opacity: 0;
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 15px;
     }
-
-    /* Spine, Pages, Edges (Original structure) */
-    .spine {
-      position:absolute; left: -12px; top: 6px; width: 24px; height: calc(100% - 12px); transform-origin: left center; transform: rotateY(90deg) translateX(-12px); border-radius: 8px 0 0 8px; background: linear-gradient(180deg,#e6e6e8,#cfcfd3); box-shadow: inset 0 2px 6px rgba(0,0,0,0.06);
+    button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 6px;
+      background: #1f72ff;
+      color: white;
+      font-weight: bold;
+      font-size: 15px;
+      cursor: pointer;
     }
-    .pages {
-      position:absolute; left: -8px; top: 10px; width: 16px; height: calc(100% - 20px); transform: rotateY(-90deg) translateX(-8px); background: linear-gradient(90deg,#fcfbf9,#f0efe9); border-radius: 4px 0 0 4px; box-shadow: inset 0 0 12px rgba(0,0,0,0.06); overflow:hidden;
-    }
-    .top-edge {
-      position:absolute; top: -10px; left: 10px; width: calc(100% - 20px); height: 16px; transform: rotateX(90deg) translateY(-10px); background: linear-gradient(180deg,#fbfbfb,#f0efef); border-radius: 8px 8px 0 0;
-    }
-    .bottom-edge {
-      position:absolute; bottom: -10px; left: 10px; width: calc(100% - 20px); height: 16px; transform: rotateX(-90deg) translateY(10px); background: linear-gradient(180deg,#fbfbfb,#f0efef); border-radius: 0 0 8px 8px;
-    }
-    .book-ghost {
-      position:absolute; bottom: -28px; left: 20px; width: 70%; height: 28px; background: rgba(0,0,0,0.45); border-radius: 50%; filter: blur(16px); transform: rotateX(90deg);
-    }
-
-    @media (max-width:700px){
-      .book-3d { width: 170px; height: 245px; }
-    }
-
-    .proc-error { color:#f87171; font-weight:600; margin-top:8px; display:none; }
-    
-    .star-glow svg{filter: drop-shadow(0 0 6px rgba(245,158,11,.75))}
-    .star-glow svg path{fill: currentColor; stroke: transparent}
-    .star-glow .filled{color:#fbbf24}
-    .star-glow .half{color:#fbbf24}
-    .star-glow .empty{color:#475569;opacity:.45}
-
-    /* ⭐ MODIFIED: Modal (Popup) CSS for Dark/Glow theme and Animation */
-    .modal {
-        display: none; 
-        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-        background-color: rgba(0, 0, 0, 0.85); /* Darker backdrop */
-        z-index: 1000; overflow: auto;
-        align-items: center; justify-content: center;
-        backdrop-filter: blur(4px); /* Subtle blur effect */
-    }
-    .modal-content {
-        background-color: #111827; /* Dark background */
-        color: white; 
-        padding: 30px; 
-        border-radius: 12px; 
-        width: 90%; 
-        max-width: 450px;
-        border: 1px solid rgba(99,102,241,0.2); /* Subtle border */
-        box-shadow: 0 5px 20px rgba(0,0,0,0.5), var(--tw-shadow-modalGlow); /* Tailwind shadow */
-        opacity: 0; /* Starts hidden for animation */
-        transform: translateY(20px) scale(0.95); /* Starts slightly off */
-        /* Animation applied via JS class */
-    }
-
-    /* MODIFIED: Download Button CSS for Shine and Click effect */
-    .download-button {
-        position: relative;
-        overflow: hidden;
-        display: inline-flex; 
-        align-items: center; 
-        gap: 8px;
-        background-color: #4CAF50; /* Green (Emerald-500 equivalent) */
-        background-image: linear-gradient(135deg, #4CAF50, #10B981); /* Gradient for depth */
-        color: white; 
-        padding: 12px 25px; 
-        margin-top: 20px;
-        text-decoration: none; 
-        border-radius: 8px;
-        font-weight: bold; 
-        font-size: 1.1em;
-        cursor: pointer;
-        border: none;
-        transition: transform 0.1s ease, box-shadow 0.1s ease, opacity 0.3s;
-        box-shadow: 0 4px 15px rgba(16,185,129,0.4);
-    }
-    .download-button:hover {
-        box-shadow: 0 6px 20px rgba(16,185,129,0.6);
-    }
-    /* Click Effect - Down state */
-    .download-button:active {
-        transform: scale(0.97);
-        box-shadow: 0 2px 5px rgba(16,185,129,0.3);
-    }
-    
-    /* Shine Effect on Button */
-    .download-button .btn-shine {
-        position: absolute;
-        inset: -6px;
-        transform: translateX(-140%) skewX(-30deg);
-        background: linear-gradient(90deg,rgba(255,255,255,0) 0%, rgba(255,255,255,0.8) 45%, rgba(255,255,255,0.4) 60%, rgba(255,255,255,0) 100%); 
-        mix-blend-mode: screen; 
-        pointer-events: none;
-        /* ⭐ FIXED: Opacity 1 कर दिया ताकि हमेशा दिखे */
-        opacity: 1;
-        transition: opacity 0.3s;
-        /* ⭐ FIXED: Animation को सीधे बटन पर लगा दिया */
-        animation: btnshine 2.6s ease-in-out infinite;
-    }
-    /* OLD CODE REMOVED: .download-button:hover .btn-shine { ... } */
-
-    /* Loading/Processing State */
-    .download-button.loading {
-      opacity: 0.7;
-      pointer-events: none;
-    }
-
-    /* ⭐ NEW: Style for the "Download Starting..." message */
-    #download-message {
-      margin-top: 15px;
-      font-size: 1em;
-      color: #6366f1; /* Indigo-500 */
-      font-weight: 500;
-      opacity: 0;
-      height: 0;
-      overflow: hidden;
-      transition: opacity 0.4s ease-out, height 0.4s ease-out;
-    }
-    #download-message.show {
-      opacity: 1;
-      height: 25px;
-    }
+    button:hover { background: #0e5de6; }
+    .small { font-size: 12px; color: #666; margin-top: 8px; }
   </style>
 </head>
-<body class="bg-[#0b0e13] text-white selection:bg-indigo-500/30">
-  <div class="pointer-events-none fixed inset-0 -z-10">
-    <div class="absolute -top-56 -left-40 h-[680px] w-[680px] rounded-full bg-indigo-600/20 blur-[140px]"></div>
-    <div class="absolute -bottom-56 -right-40 h-[600px] w-[600px] rounded-full bg-fuchsia-600/20 blur-[140px]"></div>
+<body>
+  <div class="card">
+    <h3>Buy Ebook - Demo</h3>
+    <form id="buyForm">
+      <input id="name" name="name" placeholder="Full Name" required />
+      <input id="phone" name="phone" placeholder="Phone (10 digits)" required pattern="[0-9]{10}" />
+      <input id="email" name="email" type="email" placeholder="Email" required />
+      <input id="amount" name="amount" type="number" value="49" min="1" required />
+      <button type="submit">Next — Pay</button>
+    </form>
+    <div class="small">Demo mode (Cashfree Sandbox)</div>
   </div>
-
-  <header class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-    <a href="./index.html" class="flex items-center gap-2">
-      <div class="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-indigo-500 to-fuchsia-500 shadow-glow">
-        <i data-lucide="book-open" class="w-5 h-5 text-white"></i>
-      </div>
-      <span class="text-lg font-bold"><span class="bg-gradient-to-r from-indigo-300 to-fuchsia-300 bg-clip-text text-transparent">Book</span>Mintor</span>
-    </a>
-    <a href="./spirituality.html" class="text-sm text-zinc-300 hover:text-white">Back to Library</a>
-  </header>
-
-  <section class="max-w-5xl mx-auto px-6 py-12 space-y-10">
-    <div class="flex flex-col md:flex-row items-center gap-8">
-      <div class="book-wrap" data-aos="fade-right">
-        <div class="book-3d" id="book3d">
-          <div class="cover" id="coverFace" aria-busy="true"> 
-            <div class="cover-loading-spin" id="loadingSpin" aria-hidden="true">
-              <div class="loading-half-wheel animate-glowspin"></div>
-            </div>
-            
-            <div class="cover-shine animate-coverFast" id="coverShine" aria-hidden="true"></div>
-            <img id="coverImg" alt="ebook cover (processed)" src="" loading="eager" />
-          </div>
-
-          <div class="spine" aria-hidden="true"></div>
-          <div class="pages" aria-hidden="true"></div>
-          <div class="top-edge" aria-hidden="true"></div>
-          <div class="bottom-edge" aria-hidden="true"></div>
-
-          <div class="book-ghost" aria-hidden="true"></div>
-        </div>
-      </div>
-
-      <div class="flex-1 space-y-4" data-aos="fade-left">
-        <h1 class="text-3xl font-bold">Bhagavad Gita Demystified</h1>
-        <p class="text-zinc-300">A modern interpretation of the 700 verses with practical life applications.</p>
-        <div class="text-emerald-400 text-2xl font-extrabold">₹199 
-          <span class="ml-2 line-through text-sm text-zinc-400">₹399</span>
-          <span class="ml-2 px-2 py-0.5 bg-emerald-600/20 text-emerald-300 rounded-full text-xs font-semibold">50% OFF</span>
-        </div>
-        <a id="buyBtn" href="#buy" class="cta-btn inline-flex items-center gap-2 rounded-xl bg-gradient-to-br from-indigo-500 to-fuchsia-500 px-5 py-2 text-sm font-semibold shadow-ctaglow transition hover:scale-105 active:scale-95">
-          <span>Buy Now</span>
-          <i data-lucide="shopping-cart" class="h-4 w-4"></i>
-          <span class="cta-shine animate-btnshine"></span>
-          <span class="corner-bling"></span>
-        </a>
-      </div>
-    </div>
-
-    <div data-aos="fade-up">
-      <h2 class="text-2xl font-bold mb-2">About this Ebook</h2>
-      <p class="text-zinc-300 leading-relaxed">The Bhagavad Gita is more than scripture, it's a guide to life. This edition brings out simplified explanations, practical examples, and modern reflections for today's reader.</p>
-    </div>
-
-    <div data-aos="fade-up">
-      <h2 class="text-2xl font-bold mb-4">Q&A</h2>
-      <div class="divide-y divide-white/10 rounded-xl border border-white/10 bg-white/5">
-        <details class="p-4 transition-all">
-          <summary class="cursor-pointer font-semibold flex justify-between items-center">
-            Is this ebook beginner-friendly?
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
-          </summary>
-          <div class="details-content"><p class="mt-2 text-sm text-zinc-300">Yes. It's written in simple language with clear takeaways after each chapter.</p></div>
-        </details>
-        <details class="p-4 transition-all">
-          <summary class="cursor-pointer font-semibold flex justify-between items-center">
-            Can I read it offline?
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
-          </summary>
-          <div class="details-content"><p class="mt-2 text-sm text-zinc-300">Yes. After purchase you can download and read anytime without internet.</p></div>
-        </details>
-        <details class="p-4 transition-all">
-          <summary class="cursor-pointer font-semibold flex justify-between items-center">
-            Does it include original verses?
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
-          </summary>
-          <div class="details-content"><p class="mt-2 text-sm text-zinc-300">Yes. Original verses with English explanations and practical notes.</p></div>
-        </details>
-      </div>
-    </div>
-
-    <div id="feedbacks" data-aos="fade-up">
-      <h2 class="text-2xl font-bold mb-1">What our readers say</h2>
-      <p class="mb-4 text-sm text-zinc-400">These are the most repeated points readers mentioned.</p>
-
-      <div class="grid gap-4 md:grid-cols-2" id="feedback-list">
-        <div class="p-4 rounded-xl bg-white/5 shadow-glow animate-slideUp">
-          <div class="flex items-center justify-between mb-1">
-            <div class="star-glow flex items-center gap-1">
-              <i data-lucide="star" class="h-4 w-4 filled"></i>
-              <i data-lucide="star" class="h-4 w-4 filled"></i>
-              <i data-lucide="star" class="h-4 w-4 filled"></i>
-              <i data-lucide="star" class="h-4 w-4 filled"></i>
-              <i data-lucide="star-half" class="h-4 w-4 half"></i>
-            </div>
-            <span class="text-[11px] text-zinc-400">27 Aug 2025 • 2:14 PM</span>
-          </div>
-          <p class="text-sm">"This ebook completely changed my perspective on life!"</p>
-          <span class="text-xs text-zinc-400">— Aarav, India</span>
-        </div>
-
-        <div class="p-4 rounded-xl bg-white/5 shadow-glow animate-slideUp">
-          <div class="flex items-center justify-between mb-1">
-            <div class="star-glow flex items-center gap-1">
-              <i data-lucide="star" class="h-4 w-4 filled"></i>
-              <i data-lucide="star" class="h-4 w-4 filled"></i>
-              <i data-lucide="star" class="h-4 w-4 filled"></i>
-              <i data-lucide="star" class="h-4 w-4 filled"></i>
-              <i data-lucide="star" class="h-4 w-4 empty"></i>
-            </div>
-            <span class="text-[11px] text-zinc-400">25 Aug 2025 • 6:02 PM</span>
-          </div>
-          <p class="text-sm">"Simple yet profound. Easy to read and understand."</p>
-          <span class="text-xs text-zinc-400">— Emma, UK</span>
-        </div>
-
-        <div class="p-4 rounded-xl bg-white/5 shadow-glow animate-slideUp">
-          <div class="flex items-center justify-between mb-1">
-            <div class="star-glow flex items-center gap-1">
-              <i data-lucide="star" class="h-4 w-4 filled"></i>
-              <i data-lucide="star" class="h-4 w-4 filled"></i>
-              <i data-lucide="star" class="h-4 w-4 filled"></i>
-              <i data-lucide="star" class="h-4 w-4 filled"></i>
-              <i data-lucide="star" class="h-4 w-4 filled"></i>
-            </div>
-            <span class="text-[11px] text-zinc-400">22 Aug 2025 • 11:35 AM</span>
-          </div>
-          <p class="text-sm">"The wisdom feels so relevant to modern challenges."</p>
-          <span class="text-xs text-zinc-400">— Michael, USA</span>
-        </div>
-
-        <div class="p-4 rounded-xl bg-white/5 shadow-glow animate-slideUp">
-          <div class="flex items-center justify-between mb-1">
-            <div class="star-glow flex items-center gap-1">
-              <i data-lucide="star" class="h-4 w-4 filled"></i>
-              <i data-lucide="star" class="h-4 w-4 filled"></i>
-              <i data-lucide="star" class="h-4 w-4 filled"></i>
-              <i data-lucide="star" class="h-4 w-4 filled"></i>
-              <i data-lucide="star" class="h-4 w-4 empty"></i>
-            </div>
-            <span class="text-[11px] text-zinc-400">18 Aug 2025 • 9:18 PM</span>
-          </div>
-          <p class="text-sm">"Reading it gave me peace and direction."</p>
-          <span class="text-xs text-zinc-400">— Li Wei, China</span>
-        </div>
-
-        <div class="p-4 rounded-xl bg-white/5 shadow-glow animate-slideUp hidden extra-feedback">
-          <div class="flex items-center justify-between mb-1">
-            <div class="star-glow flex items-center gap-1">
-              <i data-lucide="star" class="h-4 w-4 filled"></i>
-              <i data-lucide="star" class="h-4 w-4 filled"></i>
-              <i data-lucide="star" class="h-4 w-4 filled"></i>
-              <i data-lucide="star" class="h-4 w-4 filled"></i>
-              <i data-lucide="star-half" class="h-4 w-4 half"></i>
-            </div>
-            <span class="text-[11px] text-zinc-400">14 Aug 2025 • 3:47 PM</span>
-          </div>
-          <p class="text-sm">"A must-have for anyone seeking clarity."</p>
-          <span class="text-xs text-zinc-400">— Sophia, Canada</span>
-        </div>
-
-        <div class="p-4 rounded-xl bg-white/5 shadow-glow animate-slideUp hidden extra-feedback">
-          <div class="flex items-center justify-between mb-1">
-            <div class="star-glow flex items-center gap-1">
-              <i data-lucide="star" class="h-4 w-4 filled"></i>
-              <i data-lucide="star" class="h-4 w-4 filled"></i>
-              <i data-lucide="star" class="h-4 w-4 filled"></i>
-              <i data-lucide="star" class="h-4 w-4 filled"></i>
-              <i data-lucide="star-half" class="h-4 w-4 half"></i>
-            </div>
-            <span class="text-[11px] text-zinc-400">10 Aug 2025 • 7:02 PM</span>
-          </div>
-          <p class="text-sm">"Beautifully structured. The summaries are super helpful."</p>
-          <span class="text-xs text-zinc-400">— Priya, India</span>
-        </div>
-
-        <div class="p-4 rounded-xl bg-white/5 shadow-glow animate-slideUp hidden extra-feedback">
-          <div class="flex items-center justify-between mb-1">
-            <div class="star-glow flex items-center gap-1">
-              <i data-lucide="star" class="h-4 w-4 filled"></i>
-              <i data-lucide="star" class="h-4 w-4 filled"></i>
-              <i data-lucide="star" class="h-4 w-4 filled"></i>
-              <i data-lucide="star" class="h-4 w-4 filled"></i>
-              <i data-lucide="star" class="h-4 w-4 empty"></i>
-            </div>
-            <span class="text-[11px] text-zinc-400">06 Aug 2025 • 10:26 AM</span>
-          </div>
-          <p class="text-sm">"Great translation, very accessible for beginners."</p>
-          <span class="text-xs text-zinc-400">— Daniel, Australia</span>
-        </div>
-
-        <div class="p-4 rounded-xl bg-white/5 shadow-glow animate-slideUp hidden extra-feedback">
-          <div class="flex items-center justify-between mb-1">
-            <div class="star-glow flex items-center gap-1">
-              <i data-lucide="star" class="h-4 w-4 filled"></i>
-              <i data-lucide="star" class="h-4 w-4 filled"></i>
-              <i data-lucide="star" class="h-4 w-4 filled"></i>
-              <i data-lucide="star" class="h-4 w-4 filled"></i>
-              <i data-lucide="star-half" class="h-4 w-4 half"></i>
-            </div>
-            <span class="text-[11px] text-zinc-400">04 Aug 2025 • 8:11 PM</span>
-          </div>
-          <p class="text-sm">"Loved the practical notes and exercises at the end of chapters."</p>
-          <span class="text-xs text-zinc-400">— Neha, India</span>
-        </div>
-
-        <div class="p-4 rounded-xl bg-white/5 shadow-glow animate-slideUp hidden extra-feedback">
-          <div class="flex items-center justify-between mb-1">
-            <div class="star-glow flex items-center gap-1">
-              <i data-lucide="star" class="h-4 w-4 filled"></i>
-              <i data-lucide="star" class="h-4 w-4 filled"></i>
-              <i data-lucide="star" class="h-4 w-4 filled"></i>
-              <i data-lucide="star" class="h-4 w-4 filled"></i>
-              <i data-lucide="star" class="h-4 w-4 empty"></i>
-            </div>
-            <span class="text-[11px] text-zinc-400">02 Aug 2025 • 5:30 PM</span>
-          </div>
-          <p class="text-sm">"Clear language. I finally understood the core ideas."</p>
-          <span class="text-xs text-zinc-400">— Omar, UAE</span>
-        </div>
-
-        <div class="p-4 rounded-xl bg-white/5 shadow-glow animate-slideUp hidden extra-feedback">
-          <div class="flex items-center justify-between mb-1">
-            <div class="star-glow flex items-center gap-1">
-              <i data-lucide="star" class="h-4 w-4 filled"></i>
-              <i data-lucide="star" class="h-4 w-4 filled"></i>
-              <i data-lucide="star" class="h-4 w-4 filled"></i>
-              <i data-lucide="star" class="h-4 w-4 filled"></i>
-              <i data-lucide="star-half" class="h-4 w-4 half"></i>
-            </div>
-            <span class="text-[11px] text-zinc-400">31 Jul 2025 • 4:58 PM</span>
-          </div>
-          <p class="text-sm">"The commentary connects ancient wisdom to daily life perfectly."</p>
-          <span class="text-xs text-zinc-400">— Elena, Spain</span>
-        </div>
-      </div>
-
-      <button id="showMore" class="mt-4 inline-block rounded-xl border border-white/10 bg-white/10 px-4 py-2 text-sm text-white hover:bg-white/20 transition">Show More</button>
-    </div>
-    
-  </section>
-
-  <div id="downloadModal" class="modal">
-    <div class="modal-content" id="modalContent">
-      <h2 class="text-2xl font-bold mb-4 flex items-center gap-2 text-emerald-400">
-        <i data-lucide="check-circle" class="h-6 w-6"></i>
-        <span>Payment Successful!</span>
-      </h2>
-      <p class="mb-4 text-zinc-300">Thank you for your purchase, Your reading journey begins now.</p>
-      
-      <button id="downloadButton" class="download-button" onclick="handleDownloadClick(this)">
-        <i data-lucide="download" class="h-5 w-5"></i>
-        <span id="downloadBtnText">Download Your eBook</span>
-        <span class="btn-shine"></span>
-      </button>
-
-      <div id="download-message">
-        <i data-lucide="loader-2" class="h-4 w-4 inline animate-spin mr-1"></i>
-       Please check your downloads folder.
-      </div>
-
-      <p class="mt-4 text-xs text-zinc-500">Note: This link is unique & works only once for security.</p>
-    </div>
-  </div>
-
-  <footer class="mt-12 border-t border-white/10 py-8 text-center text-sm text-zinc-400">
-    © <span id="year"></span> BookMintor. All rights reserved.
-  </footer>
 
   <script>
-    // --- CONFIG: change this IMAGE URL if needed ---
-    const SOURCE_IMAGE = 'https://bookmintstore.github.io/home/images/ChatGPT%20Image%20Sep%2023,%202025,%2010_15_30%20PM.png';
+    // ⚙️ Yahan apna Cloudflare Worker URL daal
+    const WORKER_URL = "https://flat-butterfly-8616.rdxconfig07.workers.dev"; // <-- replace this!
 
-    // DOM refs
-    const cover = document.getElementById('coverFace'); 
-    const coverImg = document.getElementById('coverImg');
-    const coverShine = document.getElementById('coverShine');
-    const loadingSpin = document.getElementById('loadingSpin'); 
+    document.getElementById('buyForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const payload = {
+        name: document.getElementById('name').value.trim(),
+        phone: document.getElementById('phone').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        amount: parseFloat(document.getElementById('amount').value),
+        product: "Demo Ebook",
+        return_url: window.location.href
+      };
 
-    // mark busy for screen readers
-    cover.setAttribute('aria-busy', 'true');
-
-    // Preload image
-    const preloadImage = new Image();
-    preloadImage.src = SOURCE_IMAGE + (SOURCE_IMAGE.includes('?') ? '&' : '?') + 'cb=' + Date.now(); 
-    
-    // Image load logic for smooth black shine effect
-    preloadImage.onload = () => {
-      // Assign the preloaded image to the actual img element
-      coverImg.src = preloadImage.src;
-      
-      // KEY FIX 1: reveal image to LOW opacity (0.6) so spinner is clear
-      requestAnimationFrame(()=> {
-        coverImg.style.opacity = '0.6'; 
-        coverImg.style.transform = 'scale(1)';
-      });
-      
-      // Keep shine/spin effects visible for 700ms, then fade out smoothly
-      setTimeout(() => {
-        // KEY FIX 2: Smoothly transition image to full opacity (1)
-        coverImg.style.opacity = '1'; 
-
-        // Start smooth fade for the black shine
-        coverShine.style.transition = 'opacity 0.32s ease, transform 0.32s ease';
-        coverShine.style.opacity = '0';
-        coverShine.style.transform = 'translateY(-6px)'; 
-
-        // NEW: Start smooth fade out for the loading spin
-        loadingSpin.style.opacity = '0';
-
-        // after fade completes, disable animation and hide element for perf
-        setTimeout(()=> {
-          coverShine.style.animation = 'none';
-          coverShine.style.display = 'none';
-          loadingSpin.style.display = 'none'; 
-          cover.classList.add('loaded');
-          cover.setAttribute('aria-busy','false');
-        }, 450); 
-
-      }, 700); 
-    };
-    
-    // Error handling
-    preloadImage.onerror = () => {
-      const err = document.createElement('div'); err.className = 'proc-error'; err.textContent = '⚠️ Failed to load cover image.'; cover.appendChild(err); err.style.display = 'block'; cover.setAttribute('aria-busy','false');
-    };
-
-    // Details toggle
-    document.querySelectorAll('details').forEach(detail => {
-      detail.addEventListener('toggle', e => {
-        if (detail.open) {
-          const content = detail.querySelector('.details-content');
-          // Wait for a frame to ensure all CSS is applied before calculating scrollHeight
-          requestAnimationFrame(() => {
-             content.style.height = content.scrollHeight + 'px';
-          });
+      try {
+        const res = await fetch(WORKER_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const json = await res.json();
+        console.log(json);
+        if (json && json.link_url) {
+          window.location.href = json.link_url;
         } else {
-          const content = detail.querySelector('.details-content');
-          content.style.height = 0;
+          alert('Payment link not created. Check console for error.');
+          console.error(json);
         }
-      });
-    });
-
-    // Show more feedbacks
-    document.getElementById('showMore').addEventListener('click', e => {
-      document.querySelectorAll('.extra-feedback').forEach(el => el.classList.toggle('hidden'));
-      // Update button text based on visibility of hidden elements
-      e.target.textContent = document.querySelector('.extra-feedback.hidden') ? 'Show More' : 'Show Less';
-    });
-
-    // Footer year
-    document.getElementById('year').textContent = new Date().getFullYear();
-
-    // Initialize AOS
-    AOS.init({ duration: 800, once: true, offset: 120 });
-
-    // Initialize Lucide icons
-    lucide.createIcons();
-
-    // --- PAYMENT VERIFICATION LOGIC (MODIFIED) ---
-    const SECRET_KEY = 'MY_EBOOK_KEY_123';
-    const FILE_ID = '1s0Z4t7k0XYvow07JChpAkB9iwkI6jrRa';
-
-    // Function to get URL parameters
-    function getUrlParam(param) {
-      const urlParams = new URLSearchParams(window.location.search);
-      return urlParams.get(param);
-    }
-    
-    // ⭐ MODIFIED: Function to handle the download button click
-    function handleDownloadClick(button) {
-      const downloadMessage = document.getElementById('download-message');
-      const btnText = document.getElementById('downloadBtnText');
-      // Find the current icon, which might be the download icon or a spinner
-      let currentIcon = button.querySelector('[data-lucide="download"], [data-lucide="loader-2"]');
-      
-      // 1. Add "loading" effect and change button text
-      button.classList.add('loading');
-      btnText.textContent = 'Initiating Download...';
-      
-      // Replace icon with spinner
-      if (currentIcon) {
-          currentIcon.outerHTML = '<i data-lucide="loader-2" class="h-5 w-5 animate-spin"></i>'; 
-          lucide.createIcons(); // Re-render the new icon
-      }
-
-      // 2. Show the "Download Starting..." message
-      downloadMessage.classList.add('show');
-
-      // 3. Trigger the actual download after a small delay for visual feedback
-      setTimeout(() => {
-        downloadEbook();
-        
-        // 4. Update the message permanently
-        btnText.textContent = 'Downloaded!';
-        downloadMessage.innerHTML = '<i data-lucide="check-circle" class="h-4 w-4 inline text-emerald-400 mr-1"></i>Please check your downloads folder.';
-        
-        // Re-render new icon in message
-        lucide.createIcons(); 
-      }, 500); // 0.5 seconds delay
-    }
-
-    // Function to trigger actual file download
-    function downloadEbook() {
-      const downloadLink = `https://drive.google.com/uc?export=download&id=${FILE_ID}`;
-      window.open(downloadLink, '_blank');
-    }
-
-    // Check for successful payment on page load
-    document.addEventListener('DOMContentLoaded', function() {
-      const paymentStatus = getUrlParam('payment_status');
-      const secretKey = getUrlParam('secret_key');
-      const modal = document.getElementById('downloadModal');
-      const modalContent = document.getElementById('modalContent');
-      
-      if (paymentStatus === 'success' && secretKey === SECRET_KEY) {
-        // Hide query parameters from URL
-        history.replaceState(null, '', window.location.pathname);
-        
-        // Show the download modal and apply the animation class
-        modal.style.display = 'flex';
-        modalContent.classList.add('animate-modalFadeIn');
-        
-        // Ensure Lucide icons are created inside the modal
-        lucide.createIcons(); 
+      } catch (err) {
+        console.error(err);
+        alert('Network error, try again.');
       }
     });
   </script>
