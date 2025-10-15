@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Ebook Demo Payment</title>
+<title>Ebook Payment</title>
 <style>
 body{font-family:Arial,sans-serif;display:flex;align-items:center;justify-content:center;height:100vh;background:#f4f6fb;margin:0}
 .card{background:#fff;padding:25px;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,0.1);width:320px;text-align:center}
@@ -15,7 +15,7 @@ button:hover{background:#0e5de6}
 </head>
 <body>
 <div class="card">
-<h3>Buy Ebook - Demo</h3>
+<h3>Buy Ebook</h3>
 <form id="buyForm">
 <input id="name" name="name" placeholder="Full Name" required>
 <input id="phone" name="phone" placeholder="Phone (10 digits)" required pattern="[0-9]{10}">
@@ -23,25 +23,43 @@ button:hover{background:#0e5de6}
 <input id="amount" name="amount" type="number" value="49" min="1" required>
 <button type="submit">Next — Pay</button>
 </form>
-<div class="small">Demo mode (Cashfree Sandbox)</div>
+<div class="small">Sandbox / Demo mode</div>
 </div>
 
 <script>
-document.getElementById('buyForm').addEventListener('submit', function(e){
+// Worker URL — replace with your deployed Cloudflare Worker URL
+const WORKER_URL = "https://your-worker-name.workers.dev";
+
+document.getElementById('buyForm').addEventListener('submit', async function(e){
   e.preventDefault();
-  const name=document.getElementById('name').value;
-  const phone=document.getElementById('phone').value;
-  const email=document.getElementById('email').value;
-  const amount=document.getElementById('amount').value;
+  const name = document.getElementById('name').value;
+  const phone = document.getElementById('phone').value;
+  const email = document.getElementById('email').value;
+  const amount = document.getElementById('amount').value;
 
-  // Simple Sandbox redirect — no Worker, no API keys needed
-  const demoUrl=`https://sandbox.cashfree.com/pg/links`;
+  try {
+    const response = await fetch(WORKER_URL, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({name, phone, email, amount})
+    });
 
-  // Open Cashfree sandbox in new tab
-  window.open(demoUrl,'_blank');
+    const data = await response.json();
+    console.log('Worker response:', data);
 
-  // Optional: alert user for demo
-  alert('This is a demo. Sandbox payment page opened in a new tab.');
+    // Check if link_url is returned
+    let link_url = data?.link_url || data?.possible || data?.raw?.link_url || data?.raw?.data?.link_url;
+
+    if(link_url){
+      window.open(link_url, '_blank'); // open Cashfree sandbox in new tab
+    } else {
+      alert('Payment link not created. Check console for details.');
+    }
+
+  } catch(err){
+    console.error('Error calling worker:', err);
+    alert('Network or server error. Check console.');
+  }
 });
 </script>
 </body>
